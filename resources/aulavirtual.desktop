@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Aula Virtual
+GenericName=Aula Virtual
+Comment=Permite enviar achivos a las XO
+Exec=/usr/bin/av-server
+Terminal=false
+Type=Application
+Icon=aulavirtual
+Categories=GTK;GNOME;Utility;Education;
+StartupNotify=true
