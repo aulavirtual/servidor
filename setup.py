@@ -22,19 +22,24 @@ import aulavirtual
 import os
 import shutil
 
-
 if not os.path.exists('/home/servidor'):
     print "Creando el usuario servidor"
     os.system('useradd servidor')
     print "Configurando el usuario"
     print "Utiliza la contraseña grupos, para que las XO se puedan conectar"
     os.system('passwd servidor')
-    os.system('chown %s %s' % (raw_input('Escribe tu nombre de usuario: '), '/home/servidor'))
+    os.system('chown %s %s' % (raw_input('Escribe tu nombre de usuario: '),
+                               '/home/servidor'))
     shutil.copyfile('resources/log.txt', '/home/servidor/log.txt')
-    shutil.copyfile('resources/serial_numbers.txt', '/home/servidor/serial_numbers.txt')
+    shutil.copyfile('resources/serial_numbers.txt',
+                    '/home/servidor/serial_numbers.txt')
     os.system('chown %s %s' % ('servidor', '/home/servidor/log.txt'))
     os.system('chown %s %s' % ('servidor', '/home/servidor/serial_numbers.txt'))
-    
+
+    import mkdirs
+    mkdirs.mkdirs()
+    mkdirs.make_desc_files()
+
 
 params = {
     "name": aulavirtual.__prj__,
@@ -47,8 +52,10 @@ params = {
     "packages": find_packages() + ['aulavirtual'],
     "scripts": ['av-server'],
     "data_files": [('/usr/share/antipapel', ['resources/.desc']),
-                   ('/usr/share/icons/gnome/48x48/apps/', ['resources/aulavirtual.png']),
-                   ('/usr/share/applications', ['resources/aulavirtual.desktop'])]
+                   ('/usr/share/icons/gnome/48x48/apps/',
+                    ['resources/aulavirtual.png']),
+                   ('/usr/share/applications',
+                    ['resources/aulavirtual.desktop'])]
 }
 
 

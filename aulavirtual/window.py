@@ -32,11 +32,6 @@ from widgets import GROUPS, SUBJECTS
 
 GROUPS_DIR = os.path.join('/home/servidor', 'Groups')
 
-if not os.path.exists(GROUPS_DIR):
-    import mkdirs
-    mkdirs.mkdirs()
-    mkdirs.make_desc_files()
-
 
 class Window(gtk.Window):
 

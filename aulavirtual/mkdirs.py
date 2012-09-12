@@ -47,7 +47,8 @@ def mkdirs():
         for s in SUBJECTS:
             os.mkdir("Groups/" + g + "/" + s)
             os.mkdir("Groups/" + g + "/" + s + "/" + '.homeworks')
-            os.chmod("Groups/" + g + "/" + s + "/" + '.homeworks', 777)
+            os.system('chmod 777 %s' % ("Groups/" + g + "/" + s + "/" +\
+                                                                  '.homeworks'))
 
 
 def make_desc_files():
@@ -57,8 +58,10 @@ def make_desc_files():
         for s in SUBJECTS:
             shutil.copyfile("/usr/share/antipapel/.desc", "Groups/" +\
                             g + "/" + s + "/.desc")
-            shutil.copyfile("/usr/share/antipapel/.desc", "Groups/" +\
+            shutil.copyfile("/usr/share/antipapel/.hdesc", "Groups/" +\
                             g + "/" + s + "/.homeworks/.desc")
+            os.system('chmod 777 %s' % "Groups/" + g + "/" + s +\
+                      "/.homeworks/.desc")
             os.system("clear")
 
             count += 1
