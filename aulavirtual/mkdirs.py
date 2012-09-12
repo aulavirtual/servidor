@@ -19,10 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-"""A simple script for create directories and description files"""
-
-__date__ = "18/04/12"
-__author__ = "Agustin Zubiaga"
+'''A simple script for create directories and description files'''
 
 from widgets import SUBJECTS, GROUPS
 
@@ -39,37 +36,37 @@ TOTAL_COUNT = len(SUBJECTS) * len(GROUPS)
 
 
 def mkdirs():
-    """Makes groups (and subject) directories."""
+    '''Makes groups (and subject) directories.'''
     os.chdir('/home/servidor')
-    os.mkdir("Groups")
+    os.mkdir('Groups')
     for g in GROUPS:
-        os.mkdir("Groups/" + g)
+        os.mkdir('Groups/' + g)
         for s in SUBJECTS:
-            os.mkdir("Groups/" + g + "/" + s)
-            os.mkdir("Groups/" + g + "/" + s + "/" + '.homeworks')
-            os.system('chmod 777 %s' % ("Groups/" + g + "/" + s + "/" +\
+            os.mkdir('Groups/' + g + '/' + s)
+            os.mkdir('Groups/' + g + '/' + s + '/' + '.homeworks')
+            os.system('chmod 777 %s' % ('Groups/' + g + '/' + s + '/' +\
                                                                   '.homeworks'))
 
 
 def make_desc_files():
-    """Makes description files."""
+    '''Makes description files.'''
     count = 0
     for g in GROUPS:
         for s in SUBJECTS:
-            shutil.copyfile("/usr/share/antipapel/.desc", "Groups/" +\
-                            g + "/" + s + "/.desc")
-            shutil.copyfile("/usr/share/antipapel/.hdesc", "Groups/" +\
-                            g + "/" + s + "/.homeworks/.desc")
-            os.system('chmod 777 %s' % "Groups/" + g + "/" + s +\
-                      "/.homeworks/.desc")
-            os.system("clear")
+            shutil.copyfile('/usr/share/antipapel/.desc', 'Groups/' +\
+                            g + '/' + s + '/.desc')
+            shutil.copyfile('/usr/share/antipapel/.hdesc', 'Groups/' +\
+                            g + '/' + s + '/.homeworks/.desc')
+            os.system('chmod 777 %s' % 'Groups/' + g + '/' + s +\
+                      '/.homeworks/.desc')
+            os.system('clear')
 
             count += 1
-            print "Creando directorios y archivos: " + str(
-                                                count * 100 / TOTAL_COUNT) + "%"
+            print 'Creando directorios y archivos: ' + str(
+                                                count * 100 / TOTAL_COUNT) + '%'
 
-    print "Listo!"
+    print 'Listo!'
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     mkdirs()
     make_desc_files()
