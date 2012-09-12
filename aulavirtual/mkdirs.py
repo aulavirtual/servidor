@@ -47,6 +47,7 @@ def mkdirs():
         for s in SUBJECTS:
             os.mkdir("Groups/" + g + "/" + s)
             os.mkdir("Groups/" + g + "/" + s + "/" + '.homeworks')
+            os.chmod("Groups/" + g + "/" + s + "/" + '.homeworks', 777)
 
 
 def make_desc_files():
