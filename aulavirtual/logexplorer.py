@@ -1,10 +1,28 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# logexplorer.py by:
+#    Agustin Zubiaga <aguz@sugarlabs.org>
+#    Cristhofer Travieso <cristhofert97@gmail.com>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import gtk
 import time
 import os
 import json
-import gobject
 
 LOGFILE = os.path.join('/home', 'servidor', 'log.txt')
 SERIAL_NUMBERS_FILE = os.path.join('/home', 'servidor', 'serial_numbers.txt')
@@ -14,7 +32,7 @@ SERIAL_NUMBERS = json.load(open(SERIAL_NUMBERS_FILE))
 def get_name(serial):
     try:
         name, group = SERIAL_NUMBERS[serial]
-	name = "%s %s" % (name, group)
+        name = "%s %s" % (name, group)
     except IndexError:
         name = 'Desconocido'
 
@@ -55,7 +73,7 @@ class LogExplorer(gtk.TreeView):
 
         self.show_all()
 
-    def _get_log(self):                                
+    def _get_log(self):
         try:
             global SERIAL_NUMBERS
             SERIAL_NUMBERS = json.load(open(SERIAL_NUMBERS_FILE))
@@ -126,7 +144,7 @@ class Canvas(gtk.VBox):
         super(Canvas, self).__init__()
 
         main = gtk.ScrolledWindow()
-        main.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC )
+        main.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         explorer = LogExplorer(self)
 
         main.add(explorer)

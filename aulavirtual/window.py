@@ -36,7 +36,7 @@ if not os.path.exists(GROUPS_DIR):
     import mkdirs
     mkdirs.mkdirs()
     mkdirs.make_desc_files()
-   
+
 
 class Window(gtk.Window):
 
@@ -54,11 +54,11 @@ class Window(gtk.Window):
         self.show_all()
 
     def _do_gui(self):
-	notebook = gtk.Notebook()
-	self.add(notebook)
+        notebook = gtk.Notebook()
+        self.add(notebook)
 
         main_container = gtk.VBox()
-	main_container.set_border_width(10)
+        main_container.set_border_width(10)
         notebook.append_page(main_container, gtk.Label('Documentos'))
 
         topbox = gtk.HBox()
@@ -96,24 +96,24 @@ class Window(gtk.Window):
 
         main_container.show_all()
 
-	lexplorer = logexplorer.Canvas()
+        lexplorer = logexplorer.Canvas()
         notebook.append_page(lexplorer, gtk.Label('Registro'))
 
-	lexplorer.show_all()
-	notebook.show_all()
-	notebook.set_current_page(0)
+        lexplorer.show_all()
+        notebook.show_all()
+        notebook.set_current_page(0)
 
     def set_file(self, path):
         self._path = path
-	self._title.set_text(os.path.split(path)[1])
+        self._title.set_text(os.path.split(path)[1])
 
     def save_cb(self, widget):
         title = self._title.get_text()
-        
-        buffer = self._description.get_buffer()
-        start = buffer.get_start_iter()
-        end = buffer.get_end_iter()
-        description = buffer.get_text(start, end, True)
+
+        _buffer = self._description.get_buffer()
+        start = _buffer.get_start_iter()
+        end = _buffer.get_end_iter()
+        description = _buffer.get_text(start, end, True)
 
         teacher = self._teacher_name.get_text()
 
@@ -122,38 +122,41 @@ class Window(gtk.Window):
 
         subject_id = self._subject_selector.get_active()
         subject = SUBJECTS[subject_id]
-        
+
         if subject_id == 0 or group_id == 0:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR)
-            dialog.set_markup('<b>%s</b>' % 'No se ha elejido el grupo y/o la materia')
+            dialog.set_markup(
+                       '<b>%s</b>' % 'No se ha elejido el grupo y/o la materia')
             dialog.format_secondary_text('Por favor elija uno')
-            dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)            
+            dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
             dialog.run()
             dialog.destroy()
-        
+
         else:
             save_dir = os.path.join(GROUPS_DIR, group, subject)
             desc_file = open(os.path.join(save_dir, '.desc'))
             mimetype = magic.from_file(self._path, mime=True)
-            
+
             try:
                 desc_dict = json.load(desc_file)
             finally:
                 desc_file.close()
 
             desc_dict[title] = (description, teacher, mimetype)
-            
+
             desc_file = open(os.path.join(save_dir, '.desc'), 'w')
             json.dump(desc_dict, desc_file)
-            desc_file.close()       
+            desc_file.close()
 
             shutil.copyfile(self._path, os.path.join(save_dir, title))
 
             # Question:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION)
             dialog.set_markup('<b>%s</b>' % '¡Documento guardado!')
-            dialog.format_secondary_text('¿Desea enviar el mismo documento a más grupos?')
-            dialog.add_buttons(gtk.STOCK_YES, gtk.RESPONSE_YES, gtk.STOCK_NO, gtk.RESPONSE_NO)            
+            dialog.format_secondary_text(
+                               '¿Desea enviar el mismo documento a más grupos?')
+            dialog.add_buttons(gtk.STOCK_YES, gtk.RESPONSE_YES,
+                               gtk.STOCK_NO, gtk.RESPONSE_NO)
             response = dialog.run()
 
             if response == gtk.RESPONSE_NO:
@@ -169,7 +172,7 @@ class Window(gtk.Window):
         self._groups_selector.set_active(0)
         self._subject_selector.set_active(0)
 
-        
+
 if __name__ == '__main__':
     window = Window()
     window._do_gui()
