@@ -19,6 +19,7 @@
 
 from setuptools import setup, find_packages
 import aulavirtual
+import aulavirtual.mkdirs
 import os
 import shutil
 
@@ -35,10 +36,6 @@ if not os.path.exists('/home/servidor'):
                     '/home/servidor/serial_numbers.txt')
     os.system('chown %s %s' % ('servidor', '/home/servidor/log.txt'))
     os.system('chown %s %s' % ('servidor', '/home/servidor/serial_numbers.txt'))
-
-    import mkdirs
-    mkdirs.mkdirs()
-    mkdirs.make_desc_files()
 
 
 params = {
@@ -62,4 +59,6 @@ params = {
 setup(**params)
 
 if __name__ == '__main__':
+    aulavirtual.mkdirs.mkdirs()
+    aulavirtual.mkdirs.make_desc_files()
     print(__doc__)

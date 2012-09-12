@@ -24,6 +24,7 @@
 from widgets import SUBJECTS, GROUPS
 
 import os
+import commands
 import shutil
 
 GROUPS = list(GROUPS)
@@ -42,10 +43,13 @@ def mkdirs():
     for g in GROUPS:
         os.mkdir('Groups/' + g)
         for s in SUBJECTS:
-            os.mkdir('Groups/' + g + '/' + s)
-            os.mkdir('Groups/' + g + '/' + s + '/' + '.homeworks')
-            os.system('chmod 777 %s' % ('Groups/' + g + '/' + s + '/' +\
-                                                                  '.homeworks'))
+            try:
+                os.mkdir('Groups/' + g + '/' + s)
+                os.mkdir('Groups/' + g + '/' + s + '/' + '.homeworks')
+                commands.getoutput('chmod 777 %s' % ('Groups/' + g + '/' +\
+                                                        s + '/' + '.homeworks'))
+            except:
+                pass
 
 
 def make_desc_files():
@@ -53,17 +57,20 @@ def make_desc_files():
     count = 0
     for g in GROUPS:
         for s in SUBJECTS:
-            shutil.copyfile('/usr/share/antipapel/.desc', 'Groups/' +\
-                            g + '/' + s + '/.desc')
-            shutil.copyfile('/usr/share/antipapel/.hdesc', 'Groups/' +\
-                            g + '/' + s + '/.homeworks/.desc')
-            os.system('chmod 777 %s' % 'Groups/' + g + '/' + s +\
-                      '/.homeworks/.desc')
-            os.system('clear')
+            try:
+                shutil.copyfile('/usr/share/antipapel/.desc', 'Groups/' +\
+                                g + '/' + s + '/.desc')
+                shutil.copyfile('/usr/share/antipapel/.desc', 'Groups/' +\
+                                g + '/' + s + '/.homeworks/.desc')
+                commands.getoutput('chmod 777 %s' % 'Groups/' + g + '/' + s +\
+                          '/.homeworks/.desc')
+                os.system('clear')
 
-            count += 1
-            print 'Creando directorios y archivos: ' + str(
+                count += 1
+                print 'Creando directorios y archivos: ' + str(
                                                 count * 100 / TOTAL_COUNT) + '%'
+            except:
+                pass
 
     print 'Listo!'
 
