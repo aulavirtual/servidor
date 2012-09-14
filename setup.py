@@ -17,7 +17,7 @@
 
 """Setup for AulaVirtual-Server (aulavirtual.wordpress.com)"""
 
-from setuptools import setup, find_packages
+from distutils.core import setup
 import aulavirtual
 import aulavirtual.mkdirs
 import os
@@ -46,7 +46,7 @@ params = {
     "author_email": aulavirtual.__mail__,
     "url": aulavirtual.__url__,
     "license": aulavirtual.__license__,
-    "packages": find_packages() + ['aulavirtual'],
+    "packages": ['aulavirtual'],
     "scripts": ['av-server'],
     "data_files": [('/usr/share/antipapel', ['resources/.desc']),
                    ('/usr/share/icons/gnome/48x48/apps/',
