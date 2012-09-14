@@ -26,9 +26,28 @@ import json
 import magic
 import shutil
 import widgets
-import logexplorer
 
 from widgets import GROUPS, SUBJECTS
+
+if not os.path.exists('/home/servidor'):
+    print "Creando el usuario servidor"
+    os.system('useradd servidor')
+    print "Configurando el usuario"
+    print "Utiliza la contraseña grupos, para que las XO se puedan conectar"
+    os.system('passwd servidor')
+    os.system('chown %s %s' % (raw_input('Escribe tu nombre de usuario: '),
+                               '/home/servidor'))
+    shutil.copyfile('/usr/share/antipapel/log.txt', '/home/servidor/log.txt')
+    shutil.copyfile('/usr/share/antipapel/serial_numbers.txt',
+                    '/home/servidor/serial_numbers.txt')
+    os.system('chmod %s %s' % ('777', '/home/servidor/log.txt'))
+    os.system('chmod %s %s' % ('777', '/home/servidor/serial_numbers.txt'))
+
+    import mkdirs
+    mkdirs.mkdirs()
+    mkdirs.make_desc_files()
+
+import logexplorer
 
 GROUPS_DIR = os.path.join('/home/servidor', 'Groups')
 

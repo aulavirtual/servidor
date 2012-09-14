@@ -7,7 +7,7 @@ __author__ = "The AulaVirtual Team"
 __mail__ = "antipapel at gmail dot com"
 __url__ = "http://antipapel.wordpress.com"
 __source__ = "https://github.com/aulavirtual/servidor"
-__version__ = "1.5"
+__version__ = "1.7"
 __license__ = "GPLv3"
 
 

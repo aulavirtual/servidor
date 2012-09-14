@@ -21,7 +21,13 @@
 
 '''A simple script for create directories and description files'''
 
-from widgets import SUBJECTS, GROUPS
+GROUPS = ("Seleccione un grupo", "1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B")
+SUBJECTS = ("Seleccione su materia", "Matematica", "Fisica", "Quimica",
+            "Idioma Español", "Literatura", "Ingles", "Tecnologia",
+            "F. Ciudadana", "O. Vocacional", "Geografia", "Historia", "Dibujo",
+            "Biologia", "Ed. Fisica", "Sexualidad", "Informatica",
+            "Cs. Fisicas", "TOC Administracion", "TOC Madera", "TOC Mecanica",
+            "TOC Arte", "TOC Alimentacion", "TOC Electrotecnia", "TOC Tics")
 
 import os
 import commands
