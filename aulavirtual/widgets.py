@@ -91,19 +91,20 @@ class Entry(gtk.Entry):
 
 class FileChooser(gtk.FileChooserDialog):
 
-    def __init__(self, parent):
+    def __init__(self, parent, title="Seleccione un archivo"):
         gtk.FileChooserDialog.__init__(self,
-                                       "Seleccione un archivo",
+                                       title,
                                        None,
                                        gtk.FILE_CHOOSER_ACTION_OPEN,
                                        (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                         gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 
         self.set_default_response(gtk.RESPONSE_OK)
-
+        self.file_path = None
         response = self.run()
         if response == gtk.RESPONSE_OK:
-            _file = self.get_filename()
-            parent.set_file(_file)
+            self.file_path = self.get_filename()
+            if parent:
+                parent.set_file(self.file_path)
 
         self.destroy()
