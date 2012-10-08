@@ -30,6 +30,7 @@ SERIAL_NUMBERS = json.load(open(SERIAL_NUMBERS_FILE))
 
 
 def get_name(serial):
+    '''devuelve el nombre'''
     try:
         name, group = SERIAL_NUMBERS[serial]
         name = "%s %s" % (name, group)
@@ -40,6 +41,7 @@ def get_name(serial):
 
 
 def num(_num):
+    '''Numero'''
     number = str(_num)
     if len(number) == 1:
         number = "0" + number
@@ -48,7 +50,7 @@ def num(_num):
 
 
 class LogExplorer(gtk.TreeView):
-
+    '''Registro del explorador'''
     def __init__(self, parent):
         super(LogExplorer, self).__init__()
 
@@ -74,6 +76,7 @@ class LogExplorer(gtk.TreeView):
         self.show_all()
 
     def _get_log(self):
+        '''Devuelve el registro'''
         try:
             global SERIAL_NUMBERS
             SERIAL_NUMBERS = json.load(open(SERIAL_NUMBERS_FILE))
@@ -103,6 +106,7 @@ class LogExplorer(gtk.TreeView):
             return []
 
     def _get_days(self):
+        '''Devuelve los dias'''
         days = {}
         _days = []
         for i in self._log:
@@ -117,6 +121,7 @@ class LogExplorer(gtk.TreeView):
         return days
 
     def refresh_log(self):
+        '''Recarga el registro'''
         self._model.clear()
         self._log = self._get_log()
         days = self._get_days()
@@ -139,7 +144,7 @@ class LogExplorer(gtk.TreeView):
 
 
 class Canvas(gtk.VBox):
-
+    '''Clase del canvas'''
     def __init__(self):
         super(Canvas, self).__init__()
 

@@ -53,7 +53,7 @@ GROUPS_DIR = os.path.join('/home/servidor', 'Groups')
 
 
 class Window(gtk.Window):
-
+    '''Ventana'''
     def __init__(self):
         gtk.Window.__init__(self)
 
@@ -68,6 +68,7 @@ class Window(gtk.Window):
         self.show_all()
 
     def _do_gui(self):
+        '''Crea la interfas grafica de usuario'''
         notebook = gtk.Notebook()
         self.add(notebook)
 
@@ -118,6 +119,7 @@ class Window(gtk.Window):
         notebook.set_current_page(0)
 
     def set_file(self, path):
+        '''Cambia el archivo'''
         self._path = path
         self._title.set_text(os.path.split(path)[1])
 
@@ -179,6 +181,7 @@ class Window(gtk.Window):
             dialog.destroy()
 
     def clear(self):
+        '''Limpia'''
         self._path = None
         self._title.set_text('')
         self._description.get_buffer().set_text('')
