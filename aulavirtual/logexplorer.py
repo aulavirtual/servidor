@@ -21,12 +21,9 @@
 
 import gtk
 import time
-import os
-import json
+import api
 
-LOGFILE = os.path.join('/home', 'servidor', 'log.txt')
-SERIAL_NUMBERS_FILE = os.path.join('/home', 'servidor', 'serial_numbers.txt')
-SERIAL_NUMBERS = json.load(open(SERIAL_NUMBERS_FILE))
+SERIAL_NUMBERS = {}
 
 
 def get_name(serial):
@@ -52,6 +49,8 @@ class LogExplorer(gtk.TreeView):
     def __init__(self, parent):
         super(LogExplorer, self).__init__()
 
+        self.sftp = parent.sftp
+
         self._parent = parent
         self._log = None
         self._model = gtk.TreeStore(str, str)
@@ -76,8 +75,8 @@ class LogExplorer(gtk.TreeView):
     def _get_log(self):
         try:
             global SERIAL_NUMBERS
-            SERIAL_NUMBERS = json.load(open(SERIAL_NUMBERS_FILE))
-            lfile = open(LOGFILE)
+            SERIAL_NUMBERS = api.get_serial_numbers(self.sftp)
+            lfile = api.get_log_file(self.sftp)
             log = []
             for line in lfile.readlines():
                 ltime, serial, action = line.split(' - ')
@@ -140,8 +139,10 @@ class LogExplorer(gtk.TreeView):
 
 class Canvas(gtk.VBox):
 
-    def __init__(self):
+    def __init__(self, sftp):
         super(Canvas, self).__init__()
+
+        self.sftp = sftp
 
         main = gtk.ScrolledWindow()
         main.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)

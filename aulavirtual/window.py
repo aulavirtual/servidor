@@ -25,6 +25,7 @@ import api
 
 import gtk
 import widgets
+import keys
 
 from widgets import GROUPS, SUBJECTS
 import logexplorer
@@ -92,8 +93,11 @@ class Window(gtk.Window):
 
         main_container.show_all()
 
-        lexplorer = logexplorer.Canvas()
+        lexplorer = logexplorer.Canvas(self.sftp)
         notebook.append_page(lexplorer, gtk.Label('Registro'))
+
+        kcanvas = keys.KeysConfiguration(self.sftp)
+        notebook.append_page(kcanvas, gtk.Label('Configuracion'))
 
         lexplorer.show_all()
         notebook.show_all()

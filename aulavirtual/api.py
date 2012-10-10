@@ -31,7 +31,9 @@ SERVER = '192.168.1.100'
 USERNAME = 'profesores'
 RSAKEY = os.path.join(os.getenv('HOME'), '.ssh', 'id_rsa')
 GROUPS_DIR = '/home/servidor/Groups'
-AUTHORIZED_KEYS = ''
+AUTHORIZED_KEYS = '/home/%s/.ssh/authorized_keys' % USERNAME
+SERIAL_NUMBERS = os.path.join('/home', 'servidor', 'serial_numbers.txt')
+LOGFILE = os.path.join('/home', 'servidor', 'log.txt')
 
 
 def connect_to_server():
@@ -67,11 +69,23 @@ def save_document(sftp, uri, name, group, subject, title, description):
     desc.close()
 
 
-def get_authorize_keys(self, sftp, mode='r'):
+def get_authorized_keys(sftp, mode):
     """Return authorized keys python file"""
     return sftp.open(AUTHORIZED_KEYS, mode)
 
 
-def install_ssh_key(self, path):
+def install_ssh_key(path):
     """Install the ssh key in the main server"""
     os.system('ssh-copy-id -i %s %s@%s' % (path, USERNAME, SERVER))
+
+
+def get_serial_numbers(sftp):
+    _file = sftp.open(SERIAL_NUMBERS)
+    try:
+        return json.load(_file)
+    finally:
+        _file.close()
+
+
+def get_log_file(sftp):
+    return sftp.open(LOGFILE, 'r')

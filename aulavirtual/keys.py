@@ -35,8 +35,10 @@ AUTHORIZED_KEYS = '%s/.ssh/authorized_keys' % os.getenv('HOME')
 
 class KeysConfiguration(gtk.VBox):
 
-    def __init__(self):
+    def __init__(self, sftp):
         super(KeysConfiguration, self).__init__()
+
+        self.sftp = sftp
 
         toolbar = gtk.Toolbar()
         self.pack_start(toolbar, False, True, 0)
@@ -78,9 +80,11 @@ class KeysConfiguration(gtk.VBox):
 
     def refresh(self):
         self._liststore.clear()
-        keys = api.get_authorized_keys('r')
+        keys = api.get_authorized_keys(self.sftp, 'r')
         for key in keys.read().split('# '):
             line = key.split('\n')[:-2]
+            if len(line) and line[-1] == '':
+                line = line[:-1]
             try:
                 name, rsakey = line
                 name, mac = name.split(': ')
@@ -91,7 +95,7 @@ class KeysConfiguration(gtk.VBox):
                         macmark += c
                     else:
                         macmark +=\
-                                  '<span foreground="grey"><b>%s</b></span>' % c
+                                 '<span foreground="grey"><b>%s</b></span>' % c
                 if name:
                     self._liststore.append([name, macmark])
             except:
@@ -130,7 +134,7 @@ class KeysConfiguration(gtk.VBox):
         dialog.set_markup(
                    '<b>%s</b>' % '¿Está seguro?')
         dialog.format_secondary_text(
-                             '¿Desea eliminar la clave de acceso de %s?' % name)
+                            '¿Desea eliminar la clave de acceso de %s?' % name)
         dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT,
                            gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         response = dialog.run()
@@ -149,7 +153,7 @@ class KeysConfiguration(gtk.VBox):
         filechooser = widgets.FileChooser(None, 'Seleccione una clave')
         if filechooser.file_path and self._check_password():
             desc_path = os.path.join(os.path.dirname(filechooser.file_path),
-                                     '.desc')
+                                      '.desc')
             desc_file = open(desc_path, 'r')
             desc = json.load(desc_file)
             desc_file.close()
@@ -166,7 +170,7 @@ class KeysConfiguration(gtk.VBox):
             self._save_keys()
 
     def _save_keys(self):
-        keys = api.get_authorized_keys('w')
+        keys = api.get_authorized_keys(self.sftp, 'w')
         count = 0
         for name in self._keys.keys():
             mac, rsakey = self._keys[name]
