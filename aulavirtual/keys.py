@@ -21,6 +21,7 @@
 import gtk
 import os
 import json
+import api
 import widgets
 
 try:
@@ -29,7 +30,7 @@ try:
 except ImportError:
     import checkpasswd64 as checkpasswd
 
-AUTHORIZED_KEYS = 'authorized_keys.py'
+AUTHORIZED_KEYS = '%s/.ssh/authorized_keys' % os.getenv('HOME')
 
 
 class KeysConfiguration(gtk.VBox):
@@ -77,7 +78,7 @@ class KeysConfiguration(gtk.VBox):
 
     def refresh(self):
         self._liststore.clear()
-        keys = open(AUTHORIZED_KEYS, 'r')
+        keys = api.get_authorized_keys('r')
         for key in keys.read().split('# '):
             line = key.split('\n')[:-2]
             try:
@@ -165,7 +166,7 @@ class KeysConfiguration(gtk.VBox):
             self._save_keys()
 
     def _save_keys(self):
-        keys = open(AUTHORIZED_KEYS, 'w')
+        keys = api.get_authorized_keys('w')
         count = 0
         for name in self._keys.keys():
             mac, rsakey = self._keys[name]

@@ -21,32 +21,12 @@
 
 import os
 import sys
+import api
+
 import gtk
-import json
-import magic
-import shutil
 import widgets
 
 from widgets import GROUPS, SUBJECTS
-
-if not os.path.exists('/home/servidor'):
-    print "Creando el usuario servidor"
-    os.system('useradd servidor')
-    print "Configurando el usuario"
-    print "Utiliza la contraseña grupos, para que las XO se puedan conectar"
-    os.system('passwd servidor')
-    os.system('chown %s %s' % (raw_input('Escribe tu nombre de usuario: '),
-                               '/home/servidor'))
-    shutil.copyfile('/usr/share/antipapel/log.txt', '/home/servidor/log.txt')
-    shutil.copyfile('/usr/share/antipapel/serial_numbers.txt',
-                    '/home/servidor/serial_numbers.txt')
-    os.system('chmod %s %s' % ('777', '/home/servidor/log.txt'))
-    os.system('chmod %s %s' % ('777', '/home/servidor/serial_numbers.txt'))
-
-    import mkdirs
-    mkdirs.mkdirs()
-    mkdirs.make_desc_files()
-
 import logexplorer
 
 GROUPS_DIR = os.path.join('/home/servidor', 'Groups')
@@ -108,6 +88,8 @@ class Window(gtk.Window):
         save.connect('clicked', self.save_cb)
         bottom.pack_end(save, False, True, 0)
 
+        self.sftp = api.connect_to_server()
+
         main_container.show_all()
 
         lexplorer = logexplorer.Canvas()
@@ -140,35 +122,21 @@ class Window(gtk.Window):
         if subject_id == 0 or group_id == 0:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR)
             dialog.set_markup(
-                       '<b>%s</b>' % 'No se ha elejido el grupo y/o la materia')
+                      '<b>%s</b>' % 'No se ha elejido el grupo y/o la materia')
             dialog.format_secondary_text('Por favor elija uno')
             dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
             dialog.run()
             dialog.destroy()
 
         else:
-            save_dir = os.path.join(GROUPS_DIR, group, subject)
-            desc_file = open(os.path.join(save_dir, '.desc'))
-            mimetype = magic.from_file(self._path, mime=True)
-
-            try:
-                desc_dict = json.load(desc_file)
-            finally:
-                desc_file.close()
-
-            desc_dict[title] = (description, teacher, mimetype)
-
-            desc_file = open(os.path.join(save_dir, '.desc'), 'w')
-            json.dump(desc_dict, desc_file)
-            desc_file.close()
-
-            shutil.copyfile(self._path, os.path.join(save_dir, title))
+            api.save_document(self.sftp, self._path, teacher, group, subject,
+                              title, description)
 
             # Question:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION)
             dialog.set_markup('<b>%s</b>' % '¡Documento guardado!')
             dialog.format_secondary_text(
-                               '¿Desea enviar el mismo documento a más grupos?')
+                              '¿Desea enviar el mismo documento a más grupos?')
             dialog.add_buttons(gtk.STOCK_YES, gtk.RESPONSE_YES,
                                gtk.STOCK_NO, gtk.RESPONSE_NO)
             response = dialog.run()
