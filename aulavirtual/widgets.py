@@ -22,7 +22,8 @@
 import gtk
 import pango
 
-GROUPS = ("Seleccione un grupo", "1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B")
+GROUPS = ("Seleccione un grupo",
+          "1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B")
 SUBJECTS = ("Seleccione su materia", "Matematica", "Fisica", "Quimica",
             "Idioma Español", "Literatura", "Ingles", "Tecnologia",
             "F. Ciudadana", "O. Vocacional", "Geografia", "Historia", "Dibujo",
@@ -32,7 +33,7 @@ SUBJECTS = ("Seleccione su materia", "Matematica", "Fisica", "Quimica",
 
 
 class Combo(gtk.ComboBox):
-
+    '''Lista desplegable'''
     def __init__(self):
         self.liststore = gtk.ListStore(str)
         gtk.ComboBox.__init__(self, self.liststore)
@@ -43,7 +44,7 @@ class Combo(gtk.ComboBox):
 
 
 class GroupChooser(Combo):
-
+    '''Lista desplegable de los Grupo'''
     def __init__(self):
         Combo.__init__(self)
 
@@ -54,7 +55,7 @@ class GroupChooser(Combo):
 
 
 class SubjectChooser(Combo):
-
+    '''Lista desplegable de las materias'''
     def __init__(self):
         Combo.__init__(self)
 
@@ -65,7 +66,7 @@ class SubjectChooser(Combo):
 
 
 class Entry(gtk.Entry):
-
+    '''Entrada de texto'''
     def __init__(self, text):
         gtk.Entry.__init__(self, max=0)
 
@@ -79,17 +80,20 @@ class Entry(gtk.Entry):
         self.show_all()
 
     def _focus_in(self, widget, event):
+        '''Enfocado'''
         if widget.get_text() == self._text:
             widget.set_text("")
             widget.modify_font(pango.FontDescription(""))
 
     def _focus_out(self, widget, event):
+        '''Desenfocado'''
         if widget.get_text() == "":
             widget.set_text(self._text)
             widget.modify_font(pango.FontDescription("italic"))
 
 
 class FileChooser(gtk.FileChooserDialog):
+    '''Selector de archivos'''
 
     def __init__(self, parent, title="Seleccione un archivo"):
         gtk.FileChooserDialog.__init__(self,

@@ -29,7 +29,7 @@ try:
 except ImportError:
     import checkpasswd64 as checkpasswd
 
-AUTHORIZED_KEYS = 'authorized_keys.py'
+AUTHORIZED_KEYS = os.path.join(os.getenv('HOME'), '.ssh', 'authorized_keys')
 
 
 class KeysConfiguration(gtk.VBox):
@@ -90,7 +90,7 @@ class KeysConfiguration(gtk.VBox):
                         macmark += c
                     else:
                         macmark +=\
-                                  '<span foreground="grey"><b>%s</b></span>' % c
+                                 '<span foreground="grey"><b>%s</b></span>' % c
                 if name:
                     self._liststore.append([name, macmark])
             except:
@@ -129,7 +129,7 @@ class KeysConfiguration(gtk.VBox):
         dialog.set_markup(
                    '<b>%s</b>' % '¿Está seguro?')
         dialog.format_secondary_text(
-                             '¿Desea eliminar la clave de acceso de %s?' % name)
+                            '¿Desea eliminar la clave de acceso de %s?' % name)
         dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT,
                            gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         response = dialog.run()
@@ -154,7 +154,7 @@ class KeysConfiguration(gtk.VBox):
             desc_file.close()
 
             name = os.path.split(filechooser.file_path)[1].\
-                                              replace('_', ' ').split('.pub')[0]
+                                             replace('_', ' ').split('.pub')[0]
             mac = desc[name]
 
             rsakey_file = open(filechooser.file_path)

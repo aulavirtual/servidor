@@ -21,13 +21,8 @@
 
 import os
 import sys
-import gtk
-import json
 import magic
 import shutil
-import widgets
-
-from widgets import GROUPS, SUBJECTS
 
 if not os.path.exists('/home/servidor'):
     print "Creando el usuario servidor"
@@ -47,13 +42,19 @@ if not os.path.exists('/home/servidor'):
     mkdirs.mkdirs()
     mkdirs.make_desc_files()
 
+import widgets
+
+from widgets import GROUPS, SUBJECTS
+import gtk
+import json
+import keys
 import logexplorer
 
 GROUPS_DIR = os.path.join('/home/servidor', 'Groups')
 
 
 class Window(gtk.Window):
-
+    '''Ventana'''
     def __init__(self):
         gtk.Window.__init__(self)
 
@@ -68,6 +69,7 @@ class Window(gtk.Window):
         self.show_all()
 
     def _do_gui(self):
+        '''Crea la interfas grafica de usuario'''
         notebook = gtk.Notebook()
         self.add(notebook)
 
@@ -114,10 +116,15 @@ class Window(gtk.Window):
         notebook.append_page(lexplorer, gtk.Label('Registro'))
 
         lexplorer.show_all()
+
+        kcanvas = keys.KeysConfiguration()
+        notebook.append_page(kcanvas, gtk.Label('Configuracion'))
+
         notebook.show_all()
         notebook.set_current_page(0)
 
     def set_file(self, path):
+        '''Cambia el archivo'''
         self._path = path
         self._title.set_text(os.path.split(path)[1])
 
@@ -140,7 +147,7 @@ class Window(gtk.Window):
         if subject_id == 0 or group_id == 0:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR)
             dialog.set_markup(
-                       '<b>%s</b>' % 'No se ha elejido el grupo y/o la materia')
+                      '<b>%s</b>' % 'No se ha elejido el grupo y/o la materia')
             dialog.format_secondary_text('Por favor elija uno')
             dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
             dialog.run()
@@ -168,7 +175,7 @@ class Window(gtk.Window):
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION)
             dialog.set_markup('<b>%s</b>' % '¡Documento guardado!')
             dialog.format_secondary_text(
-                               '¿Desea enviar el mismo documento a más grupos?')
+                              '¿Desea enviar el mismo documento a más grupos?')
             dialog.add_buttons(gtk.STOCK_YES, gtk.RESPONSE_YES,
                                gtk.STOCK_NO, gtk.RESPONSE_NO)
             response = dialog.run()
@@ -179,6 +186,7 @@ class Window(gtk.Window):
             dialog.destroy()
 
     def clear(self):
+        '''Limpia'''
         self._path = None
         self._title.set_text('')
         self._description.get_buffer().set_text('')
